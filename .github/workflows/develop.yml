@@ -8,20 +8,20 @@ on:
     inputs:
       stage:
         description: 'Choose the stage to deploy'
-        default: '[develop]'
+        default: develop
         required: true
         type: choice
         options:
-          - '[develop]'
-          - '[staging]'
-          - '[production]'
+          - develop
+          - staging
+          - production
 
 jobs:
   matrix-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        stage: ${{ fromJson(format('[{0}]', github.event.inputs.stage || '[develop]')) }}
+        stage: ${{ github.event.inputs.stage ? [github.event.inputs.stage] : ['develop'])) }}
         include:
           - stage: develop
             env: dev
@@ -30,6 +30,7 @@ jobs:
           - stage: production
             env: prod
     steps:
+      - run: echo ${{ github.event.inputs.stage }}
       - name: echo Choose the stage
         run: echo "The stage is ${{ matrix.stage }}"
 
