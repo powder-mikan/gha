@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        stage: ${{ fromJSON(format('[{0}]', inputs.stage)) }}
+        stage: ${{ fromJSON(format('[{0}]', github.event.inputs.stage)) }}
         include:
           - stage: develop
             env: dev
