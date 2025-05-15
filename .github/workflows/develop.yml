@@ -1,0 +1,36 @@
+name: Matrix Test
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'Choose the stage to deploy'
+        default: 'develop'
+        required: true
+        type: choice
+        options: [develop, staging, production]
+
+jobs:
+  matrix-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stage: ${{ inputs.stage || 'develop' }}
+        include:
+          - stage: develop
+            env: dev
+          - stage: staging
+            env: staging
+          - stage: production
+            env: prod
+    steps:
+      - name: echo Choose the stage
+        run: echo "The stage is ${{ inputs.stage }}"
+
+      - name: echo Runnning Matrix
+        run: |
+          echo "The stage is ${{ matrix.stage }}"
+          echo "The env is ${{ matrix.env }}"
